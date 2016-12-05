@@ -1,0 +1,148 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="msapplication-tap-highlight" content="no" />
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width" />
+    <link rel="stylesheet" href="../css/jquery.mobile-1.4.5.css"/>
+    <script type="text/javascript" src="../js/jquery-2.2.3.min.js"></script>
+    <script type="text/javascript" src="../js/jquery.mobile-1.4.5.js"></script>
+    <!-- This is a wide open CSP declaration. To lock this down for production, see below. -->
+    <meta http-equiv="Content-Security-Policy" content="default-src * 'unsafe-inline'; style-src 'self' 'unsafe-inline'; media-src *" />
+    <!-- Good default declaration:
+    * gap: is required only on iOS (when using UIWebView) and is needed for JS->native communication
+    * https://ssl.gstatic.com is required only on Android and is needed for TalkBack to function properly
+    * Disables use of eval() and inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
+        * Enable inline JS: add 'unsafe-inline' to default-src
+        * Enable eval(): add 'unsafe-eval' to default-src
+    * Create your own at http://cspisawesome.com
+    -->
+    <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: 'unsafe-inline' https://ssl.gstatic.com; style-src 'self' 'unsafe-inline'; media-src *" /> -->
+
+    <link rel="stylesheet" type="text/css" href="../css/index.css"/>
+    <title>ATM Assistance Puntos Interes</title>
+    <meta charset="utf-8" />
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAya3pdNGTFtC7AS7jLPdySx9RtMn1peLg&libraries=places"></script>
+<script> 
+alert('Recuerde activar el GPS para poder utilizar los mapas gracias.');
+
+ var map;
+ var infowindow;
+
+ function initMap(myPlace)
+ {
+ // Creamos un mapa con las coordenadas actuales
+   navigator.geolocation.getCurrentPosition(function(pos) {
+ 
+   lat = pos.coords.latitude;
+   lon = pos.coords.longitude;
+   myPlacet = myPlace;
+ 
+   var myLatlng = new google.maps.LatLng(lat, lon);
+   var mapOptions = {
+     center: myLatlng,
+     zoom: 14,
+     mapTypeId: google.maps.MapTypeId.ROADMAP
+   };
+ 
+   map = new google.maps.Map(document.getElementById("mapa"),  mapOptions);
+ 
+   // Creamos el infowindow
+   infowindow = new google.maps.InfoWindow();
+ 
+   // Especificamos la localización, el radio y el tipo de lugares que queremos obtener
+   var request = {
+     location: myLatlng,
+     radius: 5000,
+     types: [myPlacet]
+   };
+ 
+   // Creamos el servicio PlaceService y enviamos la petición.
+   var service = new google.maps.places.PlacesService(map);
+ 
+   service.nearbySearch(request, function(results, status) {
+     if (status === google.maps.places.PlacesServiceStatus.OK) {
+       for (var i = 0; i <results.length; i++) {
+         crearMarcador(results[i]);
+       }
+     }
+   });
+ }); 
+}
+ 
+ function crearMarcador(place)
+ {
+   // Creamos un marcador
+   var marker = new google.maps.Marker({
+     map: map,
+     position: place.geometry.location
+   });
+ 
+ // Asignamos el evento click del marcador
+   google.maps.event.addListener(marker, 'click', function() {
+     infowindow.setContent(place.name);
+     infowindow.open(map, this);
+   });
+   }
+</script>
+</head>
+<body onload="initMap('food')">
+	<div data-role="page" style="background-color: #fc9f19;">
+      <div data-role="header" style="background-color: #fff;" data-position="fixed" data-id="myheader">
+          <img src="../img/logo_2.png" style="width: 100%;"/>
+      </div>
+	  
+      
+      <div data-role="content" class="ui-content">
+        <div class="ui-grid-a">
+          <div class="ui-block-a" style="width:65%">
+            <select id="source" name="source" value="">
+                        <option value="airport">Aeropuerto</option>
+                        <option value="atm">Cajero autom&aacute;tico</option>
+                        <option value="bank">Banco</option>
+                        <option value="bar">Bar</option>
+                        <option value="beauty_salon">Sal&oacute;n de belleza</option>
+                        <option value="book_store">Librer&iacute;a</option>
+                        <option value="bus_station">Estaci&oacute;n de autobuses</option>
+                        <option value="cafe">Cafeter&iacute;a</option>
+                        <option value="car_rental">Alquiler de coches</option>
+                        <option value="car_repair">Reparaci&oacute;n de coches</option>
+                        <option value="convenience_store">Supermercado</option>
+                        <option value="embassy">Embajada</option>
+                        <option value="hospital">Hospital</option>
+                        <option selected value="food">Comida</option>
+                        <option value="gas_station ">Gasolinera</option>
+                        <option value="gym">Gimnasio</option>
+                        <option value="movie_theater">Cine</option>
+                        <option value="pharmacy">Farmacia</option>
+                        <option value="police">Polic&iacute;a</option>
+                        <option value="restaurant ">Restaurante</option>
+                        <option value="school">Colegio</option>
+                        <option value="subway_station">Estaci&oacute;n de metro</option>
+                        <option value="train_station">Estaci&oacute;n de tren</option>
+                        <option value="subway_station">Estaci&oacute;n de metro</option>
+                        <option value="subway_station">Estaci&oacute;n de metro</option>
+                        <option value="subway_station">Estaci&oacute;n de metro</option>
+            </select>
+          </div>
+          <div class="ui-block-b" style="width: 35%">
+            <input type="button" href="javascript:;" onclick="initMap($('#source').val()); return false;" value="Buscar"/>
+          </div>
+        </div>
+        <div id="mapa" style="width: 100%; height: 450px;"></div>
+    </div>
+      
+      
+	  <div id="myfooter" data-role="footer" data-position="fixed" data-id="myfooter">
+        <div class="ui-grid-c"><div class="ui-block-a"><a href="app_p1.html" data-transition="flip"><img src="../img/icons/home1_icon.png" style="width: 100%;"/></a></div><div class="ui-block-b"><a href="app_p2.html" data-transition="flip"><img src="../img/icons/home2_icon.png" style="width: 100%;"/></a></div><div class="ui-block-c"><a href="app_p3.html" data-transition="flip"><img src="../img/icons/home3_icon.png" style="width: 100%;"/></a></div><div class="ui-block-c"><a href="../app_p4.html" data-transition="flip"><img src="../img/icons/home4_icon.png" style="width: 100%;"/></a></div></div>
+      </div>
+	</div>
+    <script type="text/javascript" src="../cordova.js"></script>
+    <script type="text/javascript" src="../js/index.js"></script>
+    <script type="text/javascript">
+        app.initialize();
+    </script>
+</body>
+</body>
+</html>
