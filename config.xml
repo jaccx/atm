@@ -1,4 +1,4 @@
-<widget xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0" id="com.assistance.atm" version="1.5.0">
+<widget xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0" id="com.assistance.atm" version="1.5.1">
   <name>ATMAPP</name>
   <description>ATM Assistance - The Best Assistance.</description>
   <author href="http://cordovadennis.com" email="admin@cordovadennis.com">CordovaDennis</author>
